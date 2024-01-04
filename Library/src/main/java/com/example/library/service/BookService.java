@@ -59,7 +59,7 @@ public class BookService {
         if (StringUtils.isEmpty(book.getTitle()) || StringUtils.isEmpty(book.getGenre())
                 || StringUtils.isEmpty(book.getPublicationYear()) || StringUtils.isEmpty(book.getAuthorId())
                 || StringUtils.isEmpty(book.getCategoryId())) {
-            throw new InvalidFieldException("Book name cannot be empty!");
+            throw new InvalidFieldException("Complete all the fields!");
         }
 
     }
