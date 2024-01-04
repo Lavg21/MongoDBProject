@@ -1,7 +1,7 @@
 package com.example.library.repository;
 
 import com.example.library.connector.MongoDBConnector;
-import com.example.library.domain.Author;
+import com.example.library.domain.entity.Author;
 import com.example.library.mappers.DocumentToEntityMapper;
 import com.example.library.mappers.EntityToDocumentMapper;
 import com.mongodb.BasicDBObject;

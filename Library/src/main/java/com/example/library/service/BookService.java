@@ -1,6 +1,6 @@
 package com.example.library.service;
 
-import com.example.library.domain.Book;
+import com.example.library.domain.entity.Book;
 import com.example.library.exception.EntityNotFoundException;
 import com.example.library.exception.InvalidFieldException;
 import com.example.library.repository.BookRepository;

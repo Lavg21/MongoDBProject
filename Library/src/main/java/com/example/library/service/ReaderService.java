@@ -1,6 +1,6 @@
 package com.example.library.service;
 
-import com.example.library.domain.Reader;
+import com.example.library.domain.entity.Reader;
 import com.example.library.exception.EntityNotFoundException;
 import com.example.library.exception.InvalidEmailException;
 import com.example.library.exception.InvalidFieldException;

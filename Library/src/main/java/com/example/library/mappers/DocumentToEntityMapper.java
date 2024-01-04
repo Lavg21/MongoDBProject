@@ -1,6 +1,6 @@
 package com.example.library.mappers;
 
-import com.example.library.domain.*;
+import com.example.library.domain.entity.*;
 import org.bson.Document;
 
 public class DocumentToEntityMapper {

@@ -1,4 +1,4 @@
-package com.example.library.domain;
+package com.example.library.domain.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,18 +9,17 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Author {
+public class Book {
 
     private String _id;
 
-    private String name;
+    private String title;
 
-    private String email;
+    private String publicationYear;
 
     private String genre;
 
-    private String country;
+    private String authorId;
 
-    private Integer age;
-
+    private String categoryId;
 }

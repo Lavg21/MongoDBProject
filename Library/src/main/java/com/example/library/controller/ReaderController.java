@@ -1,6 +1,6 @@
 package com.example.library.controller;
 
-import com.example.library.domain.Reader;
+import com.example.library.domain.entity.Reader;
 import com.example.library.exception.EntityNotFoundException;
 import com.example.library.service.ReaderService;
 import lombok.RequiredArgsConstructor;

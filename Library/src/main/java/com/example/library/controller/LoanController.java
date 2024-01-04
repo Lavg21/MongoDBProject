@@ -1,6 +1,6 @@
 package com.example.library.controller;
 
-import com.example.library.domain.Loan;
+import com.example.library.domain.entity.Loan;
 import com.example.library.exception.EntityNotFoundException;
 import com.example.library.service.LoanService;
 import lombok.RequiredArgsConstructor;
