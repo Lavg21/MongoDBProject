@@ -15,11 +15,11 @@ public class Author {
 
     private String name;
 
-//    private String email;
-//
-//    private String genre;
-//
-//    private String country;
+    private String email;
+
+    private String genre;
+
+    private String country;
 
     private Integer age;
 
