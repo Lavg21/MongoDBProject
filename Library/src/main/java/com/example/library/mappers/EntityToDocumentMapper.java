@@ -1,9 +1,6 @@
 package com.example.library.mappers;
 
-import com.example.library.domain.Author;
-import com.example.library.domain.Book;
-import com.example.library.domain.Category;
-import com.example.library.domain.Reader;
+import com.example.library.domain.*;
 import org.bson.Document;
 
 public class EntityToDocumentMapper {
@@ -47,6 +44,17 @@ public class EntityToDocumentMapper {
         document.append("lastname", reader.getLastname());
         document.append("email", reader.getEmail());
         document.append("phone", reader.getPhone());
+        return document;
+    }
+
+    public static Document loanToDocument(Loan loan) {
+        Document document = new Document();
+
+        document.append("bookId", loan.getBookId());
+        document.append("readerId", loan.getReaderId());
+        document.append("loanDate", loan.getLoanDate());
+        document.append("dueDate", loan.getDueDate());
+        document.append("returnDate", loan.getReturnDate());
         return document;
     }
 }
