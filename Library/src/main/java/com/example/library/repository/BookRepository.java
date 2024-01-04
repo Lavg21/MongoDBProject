@@ -2,10 +2,14 @@ package com.example.library.repository;
 
 import com.example.library.connector.MongoDBConnector;
 import com.example.library.domain.Book;
+import com.example.library.mappers.DocumentToEntityMapper;
+import com.example.library.mappers.EntityToDocumentMapper;
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
 
@@ -15,22 +19,33 @@ import java.util.List;
 @Repository
 public class BookRepository {
 
-    private final MongoCollection<Book> bookCollection;
+    private final MongoCollection<Document> bookCollection;
 
     public BookRepository() {
-        bookCollection = MongoDBConnector.getDatabase().getCollection("book", Book.class);
+        bookCollection = MongoDBConnector.getDatabase().getCollection("book");
     }
 
     public void createBook(Book book) {
-        bookCollection.insertOne(book);
+        Document document = EntityToDocumentMapper.bookToDocument(book);
+        bookCollection.insertOne(document);
     }
 
     public Book getBookById(String bookId) {
-        return bookCollection.find(Filters.eq("_id", new ObjectId(bookId))).first();
+        BasicDBObject searchQuery = new BasicDBObject();
+        searchQuery.put("_id", new ObjectId(bookId));
+        for (Document document : bookCollection.find(searchQuery)) {
+            return DocumentToEntityMapper.documentToBook(document);
+        }
+
+        return null;
     }
 
     public void updateBook(String bookId, Book updatedBook) {
-        bookCollection.replaceOne(Filters.eq("_id", new ObjectId(bookId)), updatedBook);
+        bookCollection.updateOne(Filters.eq("_id", new ObjectId(bookId)), Updates.set("title", updatedBook.getTitle()));
+        bookCollection.updateOne(Filters.eq("_id", new ObjectId(bookId)), Updates.set("publicationYear", updatedBook.getPublicationYear()));
+        bookCollection.updateOne(Filters.eq("_id", new ObjectId(bookId)), Updates.set("genre", updatedBook.getGenre()));
+        bookCollection.updateOne(Filters.eq("_id", new ObjectId(bookId)), Updates.set("authorId", updatedBook.getAuthorId()));
+        bookCollection.updateOne(Filters.eq("_id", new ObjectId(bookId)), Updates.set("categoryId", updatedBook.getCategoryId()));
     }
 
     public void deleteBook(String bookId) {
@@ -38,15 +53,17 @@ public class BookRepository {
     }
 
     public List<Book> getAllBooks() {
-        List<Book> allBooks = new ArrayList<>();
-        FindIterable<Book> booksIterable = bookCollection.find();
-
-        try (MongoCursor<Book> cursor = booksIterable.iterator()) {
-            while (cursor.hasNext()) {
-                allBooks.add(cursor.next());
-            }
+        FindIterable<Document> iterDoc = bookCollection.find();
+        List<Book> books = new ArrayList<>();
+        for (Document document : iterDoc) {
+            Book book = DocumentToEntityMapper.documentToBook(document);
+            books.add(book);
         }
 
-        return allBooks;
+        return books;
+    }
+
+    public boolean isBookExists(String bookId) {
+        return bookCollection.countDocuments(Filters.eq("_id", new ObjectId(bookId))) > 0;
     }
 }

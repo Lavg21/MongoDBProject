@@ -2,7 +2,7 @@ package com.example.library.service;
 
 import com.example.library.domain.Category;
 import com.example.library.exception.EntityNotFoundException;
-import com.example.library.exception.InvalidNameException;
+import com.example.library.exception.InvalidFieldException;
 import com.example.library.exception.InvalidNumberException;
 import com.example.library.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,7 @@ public class CategoryService {
         validateCategory(category);
 
         if (!categoryRepository.isNameUnique(category.getName())) {
-            throw new InvalidNameException("Name " + category.getName() + " is not unique!");
+            throw new InvalidFieldException("Name " + category.getName() + " is not unique!");
         }
 
         if (category.getNumberOfBooks() < 0) {
@@ -66,11 +66,11 @@ public class CategoryService {
 
     private void validateCategory(Category category) {
         if (StringUtils.isEmpty(category.getName())) {
-            throw new InvalidNameException("Category name cannot be empty!");
+            throw new InvalidFieldException("Category name cannot be empty!");
         }
 
         if (StringUtils.isEmpty(category.getDescription())) {
-            throw new InvalidNameException("Category description cannot be empty!");
+            throw new InvalidFieldException("Category description cannot be empty!");
         }
 
         if (category.getNumberOfBooks() < 0) {

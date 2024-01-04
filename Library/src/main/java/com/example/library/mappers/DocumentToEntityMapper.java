@@ -1,6 +1,7 @@
 package com.example.library.mappers;
 
 import com.example.library.domain.Author;
+import com.example.library.domain.Book;
 import com.example.library.domain.Category;
 import org.bson.Document;
 
@@ -22,5 +23,14 @@ public class DocumentToEntityMapper {
                 Integer.parseInt(document.get("numberOfBooks").toString()),
                 Boolean.parseBoolean(document.get("isActive").toString()),
                 document.get("createdBy").toString());
+    }
+
+    public static Book documentToBook(Document document) {
+        return new Book(document.get("_id").toString(),
+                document.get("title").toString(),
+                document.get("publicationYear").toString(),
+                document.get("genre").toString(),
+                document.get("authorId").toString(),
+                document.get("categoryId").toString());
     }
 }

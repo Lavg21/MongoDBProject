@@ -2,9 +2,9 @@ package com.example.library.service;
 
 import com.example.library.domain.Author;
 import com.example.library.exception.EntityNotFoundException;
-import com.example.library.exception.InvalidNumberException;
 import com.example.library.exception.InvalidEmailException;
-import com.example.library.exception.InvalidNameException;
+import com.example.library.exception.InvalidFieldException;
+import com.example.library.exception.InvalidNumberException;
 import com.example.library.repository.AuthorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public class AuthorService {
         }
 
         if (!authorRepository.isNameUnique(author.getName())) {
-            throw new InvalidNameException("Name " + author.getName() + " is not unique!");
+            throw new InvalidFieldException("Name " + author.getName() + " is not unique!");
         }
 
         if (author.getAge() < 0) {
@@ -71,7 +71,7 @@ public class AuthorService {
 
     private void validateAuthor(Author author) {
         if (StringUtils.isEmpty(author.getName())) {
-            throw new InvalidNameException("Author name cannot be empty!");
+            throw new InvalidFieldException("Author name cannot be empty!");
         }
 
         if (!isValidEmail(author.getEmail())) {

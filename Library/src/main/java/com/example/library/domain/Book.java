@@ -17,6 +17,8 @@ public class Book {
 
     private String publicationYear;
 
+    private String genre;
+
     private String authorId;
 
     private String categoryId;
