@@ -1,8 +1,8 @@
 package com.example.library.service;
 
 import com.example.library.domain.Author;
-import com.example.library.exception.AuthorNotFoundException;
-import com.example.library.exception.InvalidAgeException;
+import com.example.library.exception.EntityNotFoundException;
+import com.example.library.exception.InvalidNumberException;
 import com.example.library.exception.InvalidEmailException;
 import com.example.library.exception.InvalidNameException;
 import com.example.library.repository.AuthorRepository;
@@ -27,7 +27,7 @@ public class AuthorService {
     public Author getAuthorById(String authorId) {
         Author author = authorRepository.getAuthorById(authorId);
         if (author == null) {
-            throw new AuthorNotFoundException("The author was not found!");
+            throw new EntityNotFoundException("The author was not found!");
         }
         return author;
     }
@@ -43,8 +43,8 @@ public class AuthorService {
             throw new InvalidNameException("Name " + author.getName() + " is not unique!");
         }
 
-        if (author.getAge() <= 0) {
-            throw new InvalidAgeException("Age " + author.getAge() + " is not valid!");
+        if (author.getAge() < 0) {
+            throw new InvalidNumberException("Age " + author.getAge() + " is not valid!");
         }
 
         authorRepository.createAuthor(author);
@@ -55,7 +55,7 @@ public class AuthorService {
         validateAuthor(updatedAuthor);
 
         if (!authorRepository.isAuthorExists(authorId)) {
-            throw new AuthorNotFoundException("The author was not found!");
+            throw new EntityNotFoundException("The author was not found!");
         }
         authorRepository.updateAuthor(authorId, updatedAuthor);
         return "SUCCESS";
@@ -63,7 +63,7 @@ public class AuthorService {
 
     public String deleteAuthor(String authorId) {
         if (!authorRepository.isAuthorExists(authorId)) {
-            throw new AuthorNotFoundException("The author was not found!");
+            throw new EntityNotFoundException("The author was not found!");
         }
         authorRepository.deleteAuthor(authorId);
         return "SUCCESS";
@@ -79,7 +79,7 @@ public class AuthorService {
         }
 
         if (author.getAge() < 0) {
-            throw new InvalidAgeException("The age cannot be a negative number!");
+            throw new InvalidNumberException("The age cannot be a negative number!");
         }
     }
 

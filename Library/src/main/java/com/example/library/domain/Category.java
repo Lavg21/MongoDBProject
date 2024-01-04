@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.bson.codecs.pojo.annotations.BsonProperty;
-import org.bson.types.ObjectId;
 
 @Getter
 @Setter
@@ -13,8 +11,15 @@ import org.bson.types.ObjectId;
 @NoArgsConstructor
 public class Category {
 
-    @BsonProperty("_id")
-    private ObjectId id;
+    private String _id;
 
     private String name;
+
+    private String description;
+
+    private Integer numberOfBooks;
+
+    private boolean isActive;
+
+    private String createdBy;
 }

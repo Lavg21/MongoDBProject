@@ -1,8 +1,8 @@
 package com.example.library.controller;
 
-import com.example.library.domain.Author;
+import com.example.library.domain.Category;
 import com.example.library.exception.EntityNotFoundException;
-import com.example.library.service.AuthorService;
+import com.example.library.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,32 +14,32 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-public class AuthorController {
+public class CategoryController {
 
-    private final AuthorService authorService;
+    private final CategoryService categoryService;
 
-    @GetMapping("/authors")
-    public ResponseEntity<List<Author>> getAllAuthors() {
-        List<Author> authors = authorService.getAllAuthors();
-        return new ResponseEntity<>(authors, HttpStatus.OK);
+    @GetMapping("/categories")
+    public ResponseEntity<List<Category>> getAllCategorys() {
+        List<Category> categorys = categoryService.getAllCategorys();
+        return new ResponseEntity<>(categorys, HttpStatus.OK);
     }
 
-    @GetMapping("/authors/{authorId}")
-    public ResponseEntity<Object> getAuthorById(@PathVariable String authorId) {
+    @GetMapping("/categories/{categoryId}")
+    public ResponseEntity<Object> getCategoryById(@PathVariable String categoryId) {
         try {
-            Author author = authorService.getAuthorById(authorId);
-            return new ResponseEntity<>(author, HttpStatus.OK);
+            Category category = categoryService.getCategoryById(categoryId);
+            return new ResponseEntity<>(category, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(createErrorResponse(e.getMessage()), HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            return new ResponseEntity<>(createErrorResponse("There was an error when retrieving the author!"), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(createErrorResponse("There was an error when retrieving the category!"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PostMapping("/authors")
-    public ResponseEntity<Object> createAuthor(@RequestBody Author author) {
+    @PostMapping("/categories")
+    public ResponseEntity<Object> createCategory(@RequestBody Category category) {
         try {
-            String result = authorService.createAuthor(author);
+            String result = categoryService.createCategory(category);
             if ("SUCCESS".equals(result)) {
                 return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
             } else {
@@ -50,10 +50,10 @@ public class AuthorController {
         }
     }
 
-    @PutMapping("/authors/{authorId}")
-    public ResponseEntity<Object> updateAuthor(@RequestBody Author author, @PathVariable String authorId) {
+    @PutMapping("/categories/{categoryId}")
+    public ResponseEntity<Object> updateCategory(@RequestBody Category category, @PathVariable String categoryId) {
         try {
-            String result = authorService.updateAuthor(authorId, author);
+            String result = categoryService.updateCategory(categoryId, category);
             if ("SUCCESS".equals(result)) {
                 return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
             } else {
@@ -64,10 +64,10 @@ public class AuthorController {
         }
     }
 
-    @DeleteMapping("/authors/{authorId}")
-    public ResponseEntity<Object> deleteAuthor(@PathVariable String authorId) {
+    @DeleteMapping("/categories/{categoryId}")
+    public ResponseEntity<Object> deleteCategory(@PathVariable String categoryId) {
         try {
-            String result = authorService.deleteAuthor(authorId);
+            String result = categoryService.deleteCategory(categoryId);
             if ("SUCCESS".equals(result)) {
                 return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
             } else {
