@@ -2,6 +2,7 @@ package com.example.library.repository;
 
 import com.example.library.connector.MongoDBConnector;
 import com.example.library.domain.entity.Author;
+import com.example.library.domain.entity.Book;
 import com.example.library.mappers.DocumentToEntityMapper;
 import com.example.library.mappers.EntityToDocumentMapper;
 import com.mongodb.BasicDBObject;
@@ -20,21 +21,59 @@ import java.util.List;
 public class AuthorRepository {
 
     private final MongoCollection<Document> authorCollection;
+    private final BookRepository bookRepository;
 
     public AuthorRepository() {
+
         authorCollection = MongoDBConnector.getDatabase().getCollection("author");
+        bookRepository = new BookRepository();
     }
 
-    public void createAuthor(Author author) {
-        Document document = EntityToDocumentMapper.authorToDocument(author);
-        authorCollection.insertOne(document);
+//    public void createAuthor(Author author) {
+//        Document document = EntityToDocumentMapper.authorToDocument(author);
+//        authorCollection.insertOne(document);
+//    }
+
+    public Author createAuthor(Author author) {
+        Document authorDocument = EntityToDocumentMapper.authorToDocument(author);
+        authorCollection.insertOne(authorDocument);
+
+        // Retrieve the generated _id for the newly inserted author
+        String authorId = authorDocument.getObjectId("_id").toString();
+
+        // Associate books with the author
+        if (author.getBooks() != null) {
+            for (Book book : author.getBooks()) {
+                book.setAuthorId(authorId);
+                bookRepository.createBook(book);
+            }
+        }
+
+        return author;
     }
+
+//    public Author getAuthorById(String authorId) {
+//        BasicDBObject searchQuery = new BasicDBObject();
+//        searchQuery.put("_id", new ObjectId(authorId));
+//        for (Document document : authorCollection.find(searchQuery)) {
+//            return DocumentToEntityMapper.documentToAuthor(document);
+//        }
+//
+//        return null;
+//    }
 
     public Author getAuthorById(String authorId) {
         BasicDBObject searchQuery = new BasicDBObject();
         searchQuery.put("_id", new ObjectId(authorId));
+
         for (Document document : authorCollection.find(searchQuery)) {
-            return DocumentToEntityMapper.documentToAuthor(document);
+            Author author = DocumentToEntityMapper.documentToAuthor(document);
+
+            // Retrieve and set the associated books
+            List<Book> books = bookRepository.getBooksByAuthorId(author.get_id());
+            author.setBooks(books);
+
+            return author;
         }
 
         return null;
@@ -52,11 +91,28 @@ public class AuthorRepository {
         authorCollection.deleteOne(Filters.eq("_id", new ObjectId(authorId)));
     }
 
+//    public List<Author> getAllAuthors() {
+//        FindIterable<Document> iterDoc = authorCollection.find();
+//        List<Author> authors = new ArrayList<>();
+//        for (Document document : iterDoc) {
+//            Author author = DocumentToEntityMapper.documentToAuthor(document);
+//            authors.add(author);
+//        }
+//
+//        return authors;
+//    }
+
     public List<Author> getAllAuthors() {
         FindIterable<Document> iterDoc = authorCollection.find();
         List<Author> authors = new ArrayList<>();
+
         for (Document document : iterDoc) {
             Author author = DocumentToEntityMapper.documentToAuthor(document);
+
+            // Retrieve and set the associated books
+            List<Book> books = bookRepository.getBooksByAuthorId(author.get_id());
+            author.setBooks(books);
+
             authors.add(author);
         }
 

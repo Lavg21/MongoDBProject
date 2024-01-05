@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -23,4 +25,14 @@ public class Author {
 
     private Integer age;
 
+    private List<Book> books;
+
+    public Author(String _id, String name, String email, String genre, String country, Integer age) {
+        this._id = _id;
+        this.name = name;
+        this.email = email;
+        this.genre = genre;
+        this.country = country;
+        this.age = age;
+    }
 }

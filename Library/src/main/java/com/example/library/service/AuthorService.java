@@ -1,11 +1,13 @@
 package com.example.library.service;
 
 import com.example.library.domain.entity.Author;
+import com.example.library.domain.entity.Book;
 import com.example.library.exception.EntityNotFoundException;
 import com.example.library.exception.InvalidEmailException;
 import com.example.library.exception.InvalidFieldException;
 import com.example.library.exception.InvalidNumberException;
 import com.example.library.repository.AuthorRepository;
+import com.example.library.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,8 @@ public class AuthorService {
 
     @Autowired
     private final AuthorRepository authorRepository;
+    @Autowired
+    private final BookRepository bookRepository;
 
     public List<Author> getAllAuthors() {
         return authorRepository.getAllAuthors();
@@ -31,6 +35,25 @@ public class AuthorService {
         }
         return author;
     }
+
+//    public String createAuthor(Author author) {
+//        validateAuthor(author);
+//
+//        if (!authorRepository.isEmailUnique(author.getEmail())) {
+//            throw new InvalidEmailException("Email " + author.getEmail() + " is not unique!");
+//        }
+//
+//        if (!authorRepository.isNameUnique(author.getName())) {
+//            throw new InvalidFieldException("Name " + author.getName() + " is not unique!");
+//        }
+//
+//        if (author.getAge() < 0) {
+//            throw new InvalidNumberException("Age " + author.getAge() + " is not valid!");
+//        }
+//
+//        authorRepository.createAuthor(author);
+//        return "SUCCESS";
+//    }
 
     public String createAuthor(Author author) {
         validateAuthor(author);
@@ -47,7 +70,17 @@ public class AuthorService {
             throw new InvalidNumberException("Age " + author.getAge() + " is not valid!");
         }
 
-        authorRepository.createAuthor(author);
+        // Create the author
+        Author createdAuthor = authorRepository.createAuthor(author);
+
+        // Associate books with the author
+        if (author.getBooks() != null) {
+            for (Book book : author.getBooks()) {
+                book.setAuthorId(createdAuthor.get_id());
+                bookRepository.createBook(book);
+            }
+        }
+
         return "SUCCESS";
     }
 

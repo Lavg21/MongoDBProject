@@ -25,6 +25,20 @@ public class BookRepository {
         bookCollection = MongoDBConnector.getDatabase().getCollection("book");
     }
 
+    public List<Book> getBooksByAuthorId(String authorId) {
+        List<Book> books = new ArrayList<>();
+
+        BasicDBObject searchQuery = new BasicDBObject();
+        searchQuery.put("authorId", authorId);
+
+        for (Document document : bookCollection.find(searchQuery)) {
+            Book book = DocumentToEntityMapper.documentToBook(document);
+            books.add(book);
+        }
+
+        return books;
+    }
+
     public void createBook(Book book) {
         Document document = EntityToDocumentMapper.bookToDocument(book);
         bookCollection.insertOne(document);
