@@ -1,7 +1,7 @@
 package com.example.library.domain.dto;
 
-import com.example.library.domain.entity.Author;
 import com.example.library.domain.entity.Book;
+import com.example.library.domain.entity.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,9 +11,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookWithAuthorDTO {
+public class BookWithCategoryDTO {
 
     private Book book;
-    private Author author;
 
+    private Category category;
 }

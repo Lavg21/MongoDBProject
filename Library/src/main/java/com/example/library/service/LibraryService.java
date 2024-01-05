@@ -1,34 +1,34 @@
 package com.example.library.service;
 
-import com.example.library.domain.dto.BookWithAuthorDTO;
-import com.example.library.domain.entity.Author;
+import com.example.library.domain.dto.BookWithCategoryDTO;
 import com.example.library.domain.entity.Book;
-import com.example.library.repository.AuthorRepository;
+import com.example.library.domain.entity.Category;
 import com.example.library.repository.BookRepository;
+import com.example.library.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LibraryService {
 
-    private final AuthorRepository authorRepository;
+    private final CategoryRepository categoryRepository;
     private final BookRepository bookRepository;
 
     @Autowired
-    public LibraryService(AuthorRepository authorRepository, BookRepository bookRepository) {
-        this.authorRepository = authorRepository;
+    public LibraryService(CategoryRepository categoryRepository, BookRepository bookRepository) {
+        this.categoryRepository = categoryRepository;
         this.bookRepository = bookRepository;
     }
 
-    public BookWithAuthorDTO getBookWithAuthor(String bookId) {
+    public BookWithCategoryDTO getBookWithAuthor(String bookId) {
         Book book = bookRepository.getBookById(bookId);
-        Author author = null;
+        Category category = null;
 
         if (book != null) {
-            // Retrieve the associated author using the authorId stored in the book
-            author = authorRepository.getAuthorById(book.getAuthorId());
+            // Retrieve the associated category using the categoryId stored in the book
+            category = categoryRepository.getCategoryById(book.getCategoryId());
         }
 
-        return new BookWithAuthorDTO(book, author);
+        return new BookWithCategoryDTO(book, category);
     }
 }
